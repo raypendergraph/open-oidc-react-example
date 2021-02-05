@@ -4,7 +4,7 @@ A proof of concept using the open source library [oidc-client](https://www.npmjs
 # Configuration
 You will need to change the settings in the oidc.js file to match your OIDC configuration.
 
-#Running
+# Running
 ```shell
 npm install 
 npm start
