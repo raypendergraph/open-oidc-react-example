@@ -5,16 +5,17 @@ import {selectLastError, selectUser, selectUserLoading} from "../../selectors";
 import {userLoaded} from "../../actions";
 import {Redirect} from "react-router-dom";
 import {useLocation, withRouter} from "react-router";
+
 /*
  Handles the response from the OIDC server. This component may get complicated depending on the server. I used `query`
  instead of `fragment` for the redirect data because React and anchors don't mix. This componest assumes that errors
  and tokens come back as query parameters.
  */
-function AuthResponse({user, applicationUrl, authErrorUrl, progressView: ProgressView}) {
+function AuthResponsePage({user, applicationUrl, authErrorUrl, progressView: ProgressView}) {
   const [responseError, setResponseError] = useState(undefined)
   const [isBusy, setBusy] = useState(true)
   const location = useLocation()
-  useEffect(function () {
+  useEffect(() => {
     if (user) {
       console.warn("user is present already on the login-complete stage.")
       return;
@@ -24,11 +25,11 @@ function AuthResponse({user, applicationUrl, authErrorUrl, progressView: Progres
     // probably where they would go. For Azure AD the description starts with AAD... codes so you may have to switch
     // on those.
     const errorMessage = parameters.get('error_description')
-    if (errorMessage){
+    if (errorMessage) {
       setResponseError(errorMessage);
       return;
     }
-    (async function () {
+    (async () => {
       try {
         await oidc.signinRedirectCallback()
       } catch (e) {
@@ -40,17 +41,17 @@ function AuthResponse({user, applicationUrl, authErrorUrl, progressView: Progres
   }, [user, location.search])
 
   if (responseError) {
-    return <Redirect to={`${authErrorUrl}?error=${encodeURIComponent(responseError)}`} />
+    return <Redirect to={`${authErrorUrl}?error=${encodeURIComponent(responseError)}`}/>
   }
 
   if (isBusy) {
-    return <ProgressView />
+    return <ProgressView/>
   }
 
-  return <Redirect to={applicationUrl} />
+  return <Redirect to={applicationUrl}/>
 }
 
-AuthResponse.defaultProps = {
+AuthResponsePage.defaultProps = {
   progressView: <div/>
 }
 
@@ -62,10 +63,10 @@ function mapStateToProps(state) {
   }
 }
 
-function mapDispatchToProps(dispatch){
+function mapDispatchToProps(dispatch) {
   return {
     userLoaded: user => dispatch(userLoaded(user)),
   }
 }
 
-export default withRouter( connect( mapStateToProps, mapDispatchToProps)(AuthResponse));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(AuthResponsePage));

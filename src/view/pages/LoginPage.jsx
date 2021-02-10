@@ -3,17 +3,18 @@ import {connect} from 'react-redux'
 import oidc from "../../oidc";
 import {selectUser, selectUserLoading} from "../../selectors";
 import {Redirect} from "react-router-dom";
+
 /*
  Page that handles all aspects of the login flow.
  */
 function LoginPage({user, isUserLoading, applicationUrl, authResponseUrl, progressView: ProgressView}) {
   const [errorMessage, setErrorMessage] = useState(undefined)
   const shouldLogin = !(user || isUserLoading)
-  useEffect(function () {
+  useEffect(() => {
     if (!shouldLogin) {
       return;
     }
-    (async function () {
+    (async () => {
       try {
         console.log(oidc.settings)
         // Properties relevant to this is set in oidc settings.
@@ -25,7 +26,7 @@ function LoginPage({user, isUserLoading, applicationUrl, authResponseUrl, progre
   })
 
   if (!shouldLogin) {
-    return <Redirect to={applicationUrl} />
+    return <Redirect to={applicationUrl}/>
   }
 
   if (errorMessage) {
@@ -34,11 +35,11 @@ function LoginPage({user, isUserLoading, applicationUrl, authResponseUrl, progre
     </div>
   }
 
-  return <ProgressView />
+  return <ProgressView/>
 }
 
 LoginPage.defaultProps = {
-  applicationUrl : "/app",
+  applicationUrl: "/app",
   loginErrorUrl: "/user-error",
   progressView: <div/>
 }

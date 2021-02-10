@@ -10,10 +10,10 @@ import {Redirect} from "react-router-dom";
 function LogoutPage({user, userLoading, progressView: ProgressView}) {
   const shouldLogout = user || !userLoading
   const [isBusy, setBusy] = useState(true)
-  useEffect(function () {
-    (async function () {
+  useEffect( () => {
+    (async () => {
       try {
-        if (!shouldLogout){
+        if (!shouldLogout) {
           return
         }
         await oidc.signoutRedirect()
@@ -29,7 +29,7 @@ function LogoutPage({user, userLoading, progressView: ProgressView}) {
     return <ProgressView/>
   }
 
-  return <Redirect to={"/"} />
+  return <Redirect to={"/"}/>
 }
 
 function mapStateToProps(state) {

@@ -1,11 +1,10 @@
 import {
   ACCESS_TOKEN_EXPIRED,
   SILENT_RENEW_ERROR,
-  ACCESS_TOKEN_EXPIRING,
-  USER_SIGNED_OUT,
-  USER_UNLOADED,
   USER_LOADED,
   USER_LOADING,
+  USER_SIGNED_OUT,
+  USER_UNLOADED,
 } from "./constants";
 
 const initialState = {
@@ -26,7 +25,7 @@ const stateFunctions = {
 
 export default function reducer(state = initialState, action) {
   const actionStateFunction = stateFunctions[action.type];
-  if (actionStateFunction){
+  if (actionStateFunction) {
     return {...state, ...actionStateFunction(action)}
   }
   return state;
@@ -40,30 +39,30 @@ function userLoadingState(action) {
   }
 }
 
-function userLoadedState(action){
+function userLoadedState(action) {
   return {
     user: action.payload,
     isLoadingUser: false
   }
 }
 
-function userSignedOutState(action){
+function userSignedOutState(action) {
   return {
-    user:undefined,
+    user: undefined,
     isLoadingUser: false
   }
 }
 
-function userUnloadedState(action){
+function userUnloadedState(action) {
   return {
-    user:undefined,
+    user: undefined,
     isLoadingUser: false
   }
 }
 
-function silentRenewErrorState(action){
+function silentRenewErrorState(action) {
   return {
-    user:undefined,
+    user: undefined,
     isLoadingUser: false,
     lastError: action.payload
   }
@@ -75,14 +74,14 @@ function silentRenewErrorState(action){
 //   }
 // }
 
-function accessTokenExpiredState(action){
+function accessTokenExpiredState(action) {
   return {
     user: undefined,
     isLoadingUser: false
   }
 }
 
-export function getUser(localState){
+export function getUser(localState) {
   return localState.user;
 }
 
@@ -90,6 +89,6 @@ export function getLastError(localState) {
   return localState.lastError;
 }
 
-export function getLoadingUser(localState){
+export function getLoadingUser(localState) {
   return !!localState.isLoadingUser;
 }

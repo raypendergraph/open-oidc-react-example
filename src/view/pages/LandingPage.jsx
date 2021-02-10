@@ -1,14 +1,26 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {connect} from 'react-redux'
-import {selectUser } from "../../selectors";
-
+import {selectUser} from "../../selectors";
+import oidc from "../../oidc"
 function LandingPage({user}) {
+  const [isRenewing, setRenewing] = useState(false)
+  function handleSilentRenewClick() {
+    (async () => {
+      setRenewing(true)
+      try {
+        oidc.signinSilent({redirect_uri: `${window.location.origin}/oidc/auth-response`})
+        //any error should show up via the Provider callback.
+      } finally {
+        setRenewing(false)
+      }
+    })()
+  }
 
   return <div>
     <nav className="navbar" role="navigation" aria-label="main navigation">
       <div className="navbar-brand">
         <a className="navbar-item" href="https://bulma.io">
-          <img src="https://bulma.io/images/bulma-logo.png" width="112" height="28" />
+          <img src="https://bulma.io/images/bulma-logo.png" width="112" height="28"/>
         </a>
 
         <a role="button" className="navbar-burger" aria-label="menu" aria-expanded="false"
@@ -44,7 +56,7 @@ function LandingPage({user}) {
               <a className="navbar-item" href={"/"}>
                 Contact
               </a>
-              <hr className="navbar-divider" />
+              <hr className="navbar-divider"/>
               <a className="navbar-item" href={"/"}>
                 Report an issue
               </a>
@@ -57,6 +69,9 @@ function LandingPage({user}) {
             <div className="buttons">
               <a className="button is-primary" href={'/oidc/logout'}>
                 <strong>Logout</strong>
+              </a>
+              <a className={`button is-primary ${isRenewing ? 'is-disabled' : ''}`}  onClick={handleSilentRenewClick}>
+                <strong>Renew Token</strong>
               </a>
             </div>
           </div>
@@ -92,7 +107,7 @@ function LandingPage({user}) {
           </tr>
           <tr>
             <th>email</th>
-            <td>{user.profile.emails && user.profile.emails.length > 0? user.profile.emails[0]: "none"}</td>
+            <td>{user.profile.emails && user.profile.emails.length > 0 ? user.profile.emails[0] : "none"}</td>
           </tr>
           <tr>
             <th>expires_at</th>

@@ -16,6 +16,7 @@ system... that's it.
  */
 function OidcProvider({children, ...props}) {
   const [initializing, setInitializing] = useState(true)
+
   function onUserLoaded(user) {
     console.log("user was loaded" + user)
     props.userLoaded(user)
@@ -55,14 +56,14 @@ function OidcProvider({children, ...props}) {
 
   useEffect(function () {
     // Tries to get any use cached in the store, if it's there put that in Redux and let the app load.
-    (async function(){
+    (async function () {
       try {
         const user = await oidc.getUser()
-        if (user){
+        if (user) {
           console.log("Loading cached user", user)
           props.userLoaded(user)
         }
-      }catch (e){
+      } catch (e) {
         console.error(e)
       } finally {
         setInitializing(false)
@@ -87,7 +88,7 @@ function OidcProvider({children, ...props}) {
   return React.Children.only(children)
 }
 
-function mapDispatchToProps(dispatch){
+function mapDispatchToProps(dispatch) {
   return {
     userLoaded: user => dispatch(userLoaded(user)),
     userUnloaded: () => dispatch(userUnloaded()),
